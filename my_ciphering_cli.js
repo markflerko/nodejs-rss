@@ -1,14 +1,14 @@
 const { createReadStream, createWriteStream } = require("fs");
 const { pipeline } = require("stream");
 
-function getValue(flag) {
+function getFlag(flag) {
   const flagIndex = process.argv.indexOf(flag);
   return flagIndex !== -1 ? process.argv[flagIndex + 1] : null;
 }
 
-const config = getValue("-c");
-const inputFile = getValue("-i");
-const outputFile = getValue("-o");
+const config = getFlag("-c");
+const inputFile = getFlag("-i");
+const outputFile = getFlag("-o");
 
 console.log("config: ", config);
 console.log("inputFile: ", inputFile);
