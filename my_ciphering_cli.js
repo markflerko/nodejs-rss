@@ -3,14 +3,17 @@ const ceasar = require("./ceasarChipher");
 const atbash = require("./atbashChipher");
 const rot8 = require("./rot8Chipher");
 
-function getFlag(flag) {
-  const flagIndex = process.argv.indexOf(flag);
+function getFlag(flag, flagFull) {
+  const flagIndex =
+    process.argv.indexOf(flag) === -1
+      ? process.argv.indexOf(flagFull)
+      : process.argv.indexOf(flag);
   return flagIndex !== -1 ? process.argv[flagIndex + 1] : null;
 }
 
-const config = getFlag("-c").split("-");
-const inputFile = getFlag("-i");
-const outputFile = getFlag("-o");
+const config = getFlag("-c", "--config").split("-");
+const inputFile = getFlag("-i", "--input");
+const outputFile = getFlag("-o", "--output");
 
 const input = fs.createReadStream(inputFile, "utf-8");
 const output = fs.createWriteStream(outputFile, "utf-8");
