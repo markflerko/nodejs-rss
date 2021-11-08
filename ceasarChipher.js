@@ -1,5 +1,5 @@
-var alphabet = "abcdefghijklmnopqrstuvwxyz";
-var newalpha = "";
+let alphabet = "abcdefghijklmnopqrstuvwxyz";
+let newalpha = "";
 
 function shift(n) {
   for (let i = 0; i < alphabet.length; i++) {

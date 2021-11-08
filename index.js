@@ -1,4 +1,7 @@
-const { encode } = require("./ceasarChipher");
+const ceasar = require("./ceasarChipher");
+const atbash = require("./atbashChipher");
 
-const en = encode("Az");
+const en = atbash("A!z");
+const de = atbash(en);
 console.log(en);
+console.log(de);
