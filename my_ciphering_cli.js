@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require("path");
 const ceasar = require("./ceasarChipher");
 const atbash = require("./atbashChipher");
 const rot8 = require("./rot8Chipher");
@@ -13,22 +12,23 @@ const config = getFlag("-c").split("-");
 const inputFile = getFlag("-i");
 const outputFile = getFlag("-o");
 
-fs.readFile(path.join(__dirname, inputFile), "utf-8", (err, data) => {
-  if (err) throw err;
+const input = fs.createReadStream(inputFile, "utf-8");
+const output = fs.createWriteStream(outputFile, "utf-8");
+
+input.on("data", (chunk) => {
   for (let i = 0; i < config.length; i++) {
     if (config[i] === "C1") {
-      data = ceasar.encode(data);
+      chunk = ceasar.encode(chunk);
     } else if (config[i] === "C0") {
-      data = ceasar.decode(data);
+      chunk = ceasar.decode(chunk);
     } else if (config[i] === "R1") {
-      data = rot8.encode(data);
+      chunk = rot8.encode(chunk);
     } else if (config[i] === "R0") {
-      data = rot8.decode(data);
+      chunk = rot8.decode(chunk);
     } else if (config[i] === "A") {
-      data = atbash(data);
+      chunk = atbash(chunk);
     }
   }
-  fs.writeFile(path.join(__dirname, outputFile), data, (err) => {
-    if (err) throw err;
-  });
+  output.write(chunk);
 });
+input.on("error", (error) => console.log("Error", error.message));
