@@ -10,10 +10,6 @@ const config = getFlag("-c");
 const inputFile = getFlag("-i");
 const outputFile = getFlag("-o");
 
-console.log("config: ", config);
-console.log("inputFile: ", inputFile);
-console.log("outputFile: ", outputFile);
-
 const read = createReadStream(inputFile, "utf-8");
 const write = createWriteStream(outputFile);
 
