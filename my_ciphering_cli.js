@@ -1,5 +1,5 @@
 const fs = require("fs");
-const ceasar = require("./ceasarChipher");
+const caesar = require("./ceasarChipher");
 const atbash = require("./atbashChipher");
 const rot8 = require("./rot8Chipher");
 
@@ -15,23 +15,42 @@ const config = getFlag("-c", "--config").split("-");
 const inputFile = getFlag("-i", "--input");
 const outputFile = getFlag("-o", "--output");
 
-const input = fs.createReadStream(inputFile, "utf-8");
-const output = fs.createWriteStream(outputFile, "utf-8");
-
-input.on("data", (chunk) => {
-  for (let i = 0; i < config.length; i++) {
-    if (config[i] === "C1") {
-      chunk = ceasar.encode(chunk);
-    } else if (config[i] === "C0") {
-      chunk = ceasar.decode(chunk);
-    } else if (config[i] === "R1") {
-      chunk = rot8.encode(chunk);
-    } else if (config[i] === "R0") {
-      chunk = rot8.decode(chunk);
-    } else if (config[i] === "A") {
-      chunk = atbash(chunk);
+if (inputFile === null) {
+  console.log("please, write input source");
+  process.stdin.on("data", (data, chunk = data.toString()) => {
+    for (let i = 0; i < config.length; i++) {
+      if (config[i] === "C1") {
+        chunk = caesar.encode(chunk);
+      } else if (config[i] === "C0") {
+        chunk = caesar.decode(chunk);
+      } else if (config[i] === "R1") {
+        chunk = rot8.encode(chunk);
+      } else if (config[i] === "R0") {
+        chunk = rot8.decode(chunk);
+      } else if (config[i] === "A") {
+        chunk = atbash(chunk);
+      }
     }
-  }
-  output.write(chunk);
-});
-input.on("error", (error) => console.log("Error", error.message));
+    process.stdout.write(chunk);
+  });
+} else {
+  const input = fs.createReadStream(inputFile, "utf-8");
+  const output = fs.createWriteStream(outputFile, "utf-8");
+  input.on("data", (chunk) => {
+    for (let i = 0; i < config.length; i++) {
+      if (config[i] === "C1") {
+        chunk = caesar.encode(chunk);
+      } else if (config[i] === "C0") {
+        chunk = caesar.decode(chunk);
+      } else if (config[i] === "R1") {
+        chunk = rot8.encode(chunk);
+      } else if (config[i] === "R0") {
+        chunk = rot8.decode(chunk);
+      } else if (config[i] === "A") {
+        chunk = atbash(chunk);
+      }
+    }
+    output.write(chunk);
+  });
+  input.on("error", (error) => console.log("Error", error.message));
+}
